@@ -1,0 +1,23 @@
+name: files.zip
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  unzip:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Extract ZIP
+        run: |
+          # استبدل your-file.name باسم ملف الـ ZIP الفعلي لديك
+          unzip your-file.name -d extracted_files/
+          
+      - name: Commit unzipped files
+        uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          commit_message: "Automatic unzip files"
