@@ -1,0 +1,53 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1024" height="1024" viewBox="0 0 1024 1024">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#0B2E4F"/>
+      <stop offset="1" stop-color="#14808F"/>
+    </linearGradient>
+    <linearGradient id="gold" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#F6D27A"/>
+      <stop offset="1" stop-color="#C9922E"/>
+    </linearGradient>
+  </defs>
+  <rect width="1024" height="1024" fill="url(#bg)"/>
+  <circle cx="512" cy="512" r="400" fill="#ffffff" opacity="0.06"/>
+
+  <!-- tail: fanned page edges -->
+  <g stroke="#F6D27A" stroke-width="22" stroke-linecap="round" fill="none">
+    <path d="M512 760 L512 900"/>
+    <path d="M492 756 L440 886"/>
+    <path d="M532 756 L584 886"/>
+  </g>
+
+  <!-- left wing (page) -->
+  <g transform="rotate(-24 500 700)">
+    <path d="M500 700 C380 650 250 630 120 660 L120 400 C250 370 390 400 500 480 Z" fill="#FFF8E7"/>
+    <path d="M500 700 C380 650 250 630 120 660 L120 640 C250 612 380 632 500 680 Z" fill="#E8D8AE"/>
+    <g stroke="#14808F" stroke-width="10" stroke-linecap="round" opacity="0.55" fill="none">
+      <path d="M170 470 C260 450 360 470 450 520"/>
+      <path d="M170 530 C260 510 360 530 450 575"/>
+      <path d="M170 590 C260 572 360 590 450 628"/>
+    </g>
+  </g>
+  <!-- right wing (page) -->
+  <g transform="rotate(24 524 700)">
+    <path d="M524 700 C644 650 774 630 904 660 L904 400 C774 370 634 400 524 480 Z" fill="#FFF8E7"/>
+    <path d="M524 700 C644 650 774 630 904 660 L904 640 C774 612 644 632 524 680 Z" fill="#E8D8AE"/>
+    <g stroke="#14808F" stroke-width="10" stroke-linecap="round" opacity="0.55" fill="none">
+      <path d="M854 470 C764 450 664 470 574 520"/>
+      <path d="M854 530 C764 510 664 530 574 575"/>
+      <path d="M854 590 C764 572 664 590 574 628"/>
+    </g>
+  </g>
+
+  <!-- body: book cover with spine -->
+  <path d="M390 560 C390 520 450 500 512 500 C574 500 634 520 634 560 L634 700 C634 760 580 800 512 800 C444 800 390 760 390 700 Z" fill="url(#gold)"/>
+  <rect x="500" y="500" width="24" height="300" fill="#9A6B1B" opacity="0.55"/>
+  <path d="M430 590 L470 590 M430 630 L470 630 M554 590 L594 590 M554 630 L594 630" stroke="#7A5314" stroke-width="12" stroke-linecap="round" opacity="0.6"/>
+
+  <!-- head -->
+  <circle cx="512" cy="440" r="64" fill="url(#gold)"/>
+  <path d="M566 424 L650 452 L566 474 Z" fill="#F0A33A"/>
+  <circle cx="530" cy="428" r="12" fill="#0B2E4F"/>
+  <circle cx="534" cy="424" r="4" fill="#ffffff"/>
+</svg>
