@@ -15,7 +15,7 @@ jobs:
       - name: Extract ZIP
         run: |
           # استبدل your-file.name باسم ملف الـ ZIP الفعلي لديك
-          unzip files.zip -d extracted_files/
+          unzip AlrubeiyLibrary-iOS-project.zip -d extracted_files/
           
       - name: Commit unzipped files
         uses: stefanzweifel/git-auto-commit-action@v5
