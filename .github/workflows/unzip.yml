@@ -1,4 +1,4 @@
-name: files.zip
+name: Unzip File
 
 on:
   push:
@@ -15,7 +15,7 @@ jobs:
       - name: Extract ZIP
         run: |
           # استبدل your-file.name باسم ملف الـ ZIP الفعلي لديك
-          unzip your-file.name -d extracted_files/
+          unzip files.zip -d extracted_files/
           
       - name: Commit unzipped files
         uses: stefanzweifel/git-auto-commit-action@v5
