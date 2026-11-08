@@ -1,0 +1,49 @@
+name: Build iOS IPA
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: macos-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Install XcodeGen
+        run: brew install xcodegen
+
+      - name: Generate Xcode Project
+        run: xcodegen generate
+
+      - name: Build Xcode Archive
+        run: |
+          xcodebuild -project AlrubeiyLibrary.xcodeproj \
+                     -scheme AlrubeiyLibrary \
+                     -sdk iphoneos \
+                     -configuration Release \
+                     -archivePath build/AlrubeiyLibrary.xcarchive \
+                     archive \
+                     CODE_SIGN_IDENTITY="" \
+                     CODE_SIGNING_REQUIRED=NO \
+                     CODE_SIGNING_ALLOWED=NO
+
+      - name: Package Payload to IPA
+        run: |
+          mkdir -p build/IPA/Payload
+          cp -R build/AlrubeiyLibrary.xcarchive/Products/Applications/AlrubeiyLibrary.app build/IPA/Payload/
+          cd build/IPA
+          zip -r AlrubeiyLibrary.ipa Payload
+
+      - name: Upload IPA Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: AlrubeiyLibrary-IPA
+          path: build/IPA/AlrubeiyLibrary.ipa
