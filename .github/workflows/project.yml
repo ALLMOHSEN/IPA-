@@ -4,10 +4,14 @@ on:
   push:
     branches:
       - main
+  workflow_dispatch:
+
+permissions:
+  contents: write
 
 jobs:
   build:
-    runs-on: macos-latest # يعمل على سيرفر ماك سحابي افتراضي
+    runs-on: macos-14
 
     steps:
       - name: Checkout repository
@@ -19,10 +23,11 @@ jobs:
       - name: Generate Xcode Project
         run: xcodegen generate
 
-      - name: Build Archive
+      - name: Build Xcode Archive
         run: |
           xcodebuild -project AlrubeiyLibrary.xcodeproj \
                      -scheme AlrubeiyLibrary \
+                     -sdk iphoneos \
                      -configuration Release \
                      -archivePath build/AlrubeiyLibrary.xcarchive \
                      archive \
@@ -30,13 +35,12 @@ jobs:
                      CODE_SIGNING_REQUIRED=NO \
                      CODE_SIGNING_ALLOWED=NO
 
-      - name: Export IPA (Unsigned / Ad-Hoc)
+      - name: Package Payload to IPA
         run: |
-          mkdir -p build/IPA
-          # إنشاء مجلد Payload يدويًا لتغليف ملف الـ .app وضغطه كـ .ipa (مناسب للتطبيقات المحلية)
-          mkdir -p Payload
-          cp -r build/AlrubeiyLibrary.xcarchive/Products/Applications/AlrubeiyLibrary.app Payload/
-          zip -r build/IPA/AlrubeiyLibrary.ipa Payload/
+          mkdir -p build/IPA/Payload
+          cp -R build/AlrubeiyLibrary.xcarchive/Products/Applications/AlrubeiyLibrary.app build/IPA/Payload/
+          cd build/IPA
+          zip -r AlrubeiyLibrary.ipa Payload
 
       - name: Upload IPA Artifact
         uses: actions/upload-artifact@v4
