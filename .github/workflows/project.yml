@@ -1,26 +1,45 @@
-name: AlrubeiyLibrary
-options:
-  bundleIdPrefix: com.allmohsen
-  deploymentTarget:
-    iOS: "15.0"
-targets:
-  AlrubeiyLibrary:
-    type: application
-    platform: iOS
-    sources: [App]
-    settings:
-      base:
-        PRODUCT_BUNDLE_IDENTIFIER: com.allmohsen.alrubeiylibrary
-        PRODUCT_NAME: AlrubeiyLibrary
-        MARKETING_VERSION: "1.0"
-        CURRENT_PROJECT_VERSION: "1"
-        ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
-        TARGETED_DEVICE_FAMILY: "1,2"
-        SWIFT_VERSION: "5.0"
-        GENERATE_INFOPLIST_FILE: YES
-        INFOPLIST_KEY_CFBundleDisplayName: "مكتبتي الرقمية"
-        INFOPLIST_KEY_UILaunchScreen_Generation: YES
-        INFOPLIST_KEY_UISupportedInterfaceOrientations: "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight"
-        INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad: "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight"
-        INFOPLIST_KEY_NSPhotoLibraryUsageDescription: "لاختيار صورة غلاف الكتاب"
-        INFOPLIST_KEY_NSCameraUsageDescription: "لالتقاط صورة غلاف الكتاب"
+name: Build iOS IPA
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: macos-latest # يعمل على سيرفر ماك سحابي افتراضي
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Install XcodeGen
+        run: brew install xcodegen
+
+      - name: Generate Xcode Project
+        run: xcodegen generate
+
+      - name: Build Archive
+        run: |
+          xcodebuild -project AlrubeiyLibrary.xcodeproj \
+                     -scheme AlrubeiyLibrary \
+                     -configuration Release \
+                     -archivePath build/AlrubeiyLibrary.xcarchive \
+                     archive \
+                     CODE_SIGN_IDENTITY="" \
+                     CODE_SIGNING_REQUIRED=NO \
+                     CODE_SIGNING_ALLOWED=NO
+
+      - name: Export IPA (Unsigned / Ad-Hoc)
+        run: |
+          mkdir -p build/IPA
+          # إنشاء مجلد Payload يدويًا لتغليف ملف الـ .app وضغطه كـ .ipa (مناسب للتطبيقات المحلية)
+          mkdir -p Payload
+          cp -r build/AlrubeiyLibrary.xcarchive/Products/Applications/AlrubeiyLibrary.app Payload/
+          zip -r build/IPA/AlrubeiyLibrary.ipa Payload/
+
+      - name: Upload IPA Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: AlrubeiyLibrary-IPA
+          path: build/IPA/AlrubeiyLibrary.ipa
